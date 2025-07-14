@@ -2,4 +2,5 @@
 [*]
 end_of_line = lf
 tab_width = 2
+indent_style = space
 charset = utf-8
