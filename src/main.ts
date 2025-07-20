@@ -14,6 +14,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Book Database API')
     .setDescription('Book Database API description')
+    .addBearerAuth()
     .setVersion('1.0')
     .build();
 

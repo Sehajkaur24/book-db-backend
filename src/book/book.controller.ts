@@ -1,8 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateBookDto } from './dto/create-book.dto';
 import { BookService } from './book.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('book')
+@UseGuards(AuthGuard)
+@ApiBearerAuth()
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
