@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Book } from 'src/database/entities/book.entity';
 import { Repository } from 'typeorm';
@@ -11,6 +11,14 @@ export class BookService {
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
   ) {}
+
+  async findOne(id: number): Promise<Book> {
+    const book = await this.bookRepository.findOneBy({ id });
+    if (!book) {
+      throw new HttpException('Book not found', 404);
+    }
+    return book;
+  }
 
   async findAll(): Promise<Book[]> {
     return this.bookRepository.find();
@@ -28,7 +36,7 @@ export class BookService {
   async update(id: number, book: UpdateBookDto): Promise<Book> {
     const existingBook = await this.bookRepository.findOneBy({ id });
     if (!existingBook) {
-      throw new Error('Book not found');
+      throw new HttpException('Book not found', 404);
     }
     return this.bookRepository.save({
       ...existingBook,
@@ -37,6 +45,10 @@ export class BookService {
   }
 
   async delete(id: number): Promise<void> {
+    const existingBook = await this.bookRepository.findOneBy({ id });
+    if (!existingBook) {
+      throw new HttpException('Book not found', 404);
+    }
     await this.bookRepository.delete(id);
   }
 }
